@@ -15,31 +15,44 @@ subtr[(N.tip+1):(N.tip+N.node)] <- subtrees(tr)
 taxList <- as.list(1:N.tip)
 names(taxList) <- tips
 
-shinyServer(function(input, output) {
+shinyServer(function(input, output, session) {
 
-whichTaxa <- reactive({
- 	if(input$get1 == 0 ) {
- 		xx <- subtr[[N.tip+1]] }
- 	else {
-	isolate({
-		xx <- subtr[[mrca.phylo(tr, c(input$select1:input$select2))]]
+whichLineage <- reactive({	
+			if (input$select1 == "Custom") {
+			 		if (input$get1 == 0 ) {	finalTree <- subtr[[N.tip+1]] }
+	 				else {	isolate({
+							finalTree <- subtr[[mrca.phylo(tr, c(input$select2:input$select3))]]
+					})	}	
+			}	
+			else {
+				finalTree <- switch(input$select1,
+					"Raphid diatoms" = subtr[[mrca.phylo(tr, c(101:136))]],
+					"Pennate diatoms" = subtr[[mrca.phylo(tr, c(75:136))]],
+#					"3" = c(101:136),
+#					"4" = c(101:136),
+#					"5" = c(101:136),
+#					"6" = c(101:136),
+#					"7" = c(101:136),
+#					"8" = c(101:136),
+#					"9" = c(101:136),
+					"All diatoms" = subtr[[mrca.phylo(tr, c(1:136))]])
+			}
+			return(finalTree)
 	})
-	}
-	return(xx)
+		
+output$Tree <- renderPlot({
+	plot(ladderize(whichLineage()),
+		label.offset=0.001,
+		cex=0.8,
+		no.margin=TRUE,
+		edge.width=2,
+		edge.color="darkblue",
+		tip.color="darkred")
 })
-
-output$bigTree <- renderPlot({
-		plot(ladderize(whichTaxa()),
-			label.offset=0.001,
-			cex=0.8,
-			edge.width=2,
-			edge.color="darkblue",
-			tip.color="darkred")
-	})
 
 output$textAbout <- renderUI({
 			HTML(
-			"<p>This Shiny R code is meant as a tool to explore the diatom phylogeny. The main functionality so far is plotting sub-trees based on two user-selected terminal nodes. It depends on 'ape' and 'phangorn'. It is rather clunky at present time, but it does serve its basic purpose.</p> <p>The topology is that of Theriot et al. 2010 (Plant Ecology and Evolution). I plan to have a tree constructed from all available nSSU sequences here soon. This is because the user might be interested in taxa beyond the sampling of Theriot et al. 2010 and nSSU is still by far the most sequenced marker in diatoms.</p> <p>The 'Some clades' tab will have sub-trees of some recognized clades (e.g. raphid diatoms). The 'Studies' tab is meant as a repository of phylogenies from TreeBase or Dryad. Both are in develompent and I might abandon them. Also, the 'Restore default' button doesn't quite work. I haven't figured out how to do this yet.</p> <p>For an excellent implementation of ape::plot.phylo in Shiny with the functionality to load your own tree see https://github.com/KlausVigo/shinyTreeViewer/blob/master/ui.R.</p>"
+			"<p>This Shiny R code is meant as a tool to explore the diatom phylogeny. The main functionality so far is plotting pre-defined sub-trees or sub-trees based on two user-selected terminal nodes. The code depends on 'ape' and 'phangorn'. It is rather clunky, but it does serve its basic purpose.</p> <p>To run the Interactive Diatom Phylogeny use R and call it from the GitHub repository:</p> <p> <code>shiny::runGitHub('InteractiveDiatomPhylogeny', 'teofiln')</code></p> <p>The topology is that of Theriot et al. 2010 (Plant Ecology and Evolution). I plan to have a tree constructed from all available nSSU sequences here soon. This is because the user might be interested in taxa beyond the sampling of Theriot et al. 2010 and nSSU is still by far the most sequenced marker in diatoms.</p> <p>For an excellent implementation of ape::plot.phylo in Shiny with the functionality to load your own tree see <a href=https://github.com/KlausVigo/shinyTreeViewer/blob/master/ui.R>shinyTreeViewer</a> by Klaus Vigo</p>"
 			)
 	})
 })
