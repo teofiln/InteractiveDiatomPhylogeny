@@ -12,7 +12,7 @@ names(taxList) <- tips
 
 shinyUI(fluidPage(
 
-	titlePanel(h3("An interactive diatom phylogeny", style="color:grey")),
+	titlePanel(h3("Diatom Phylogeny Browser", style="color:grey")),
 
 	sidebarLayout(#position="right",
 		sidebarPanel(
