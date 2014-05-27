@@ -50,6 +50,30 @@ output$Tree <- renderPlot({
 		tip.color="darkred")
 })
 
+output$TreeSummary <- renderText({
+	
+	str1 <- as.character(Ntip(whichLineage()))
+	str2 <- as.character(Nnode(whichLineage()))
+	whichTaxa <- reactive({
+	input$get1
+		if (input$select1 != "Custom") {
+			str3 <- gsub("_"," ", whichLineage()$tip.label[1])
+			str4 <- gsub("_"," ", whichLineage()$tip.label[Ntip(whichLineage())])
+			}
+		else {
+			isolate({
+				str3 <- gsub("_"," ", tips[as.numeric(input$select2)])
+				str4 <- gsub("_"," ", tips[as.numeric(input$select3)])
+				})
+			}
+			return(c(str3, str4))
+		})
+	paste("Sub-tree composed of ", str1, "species and ", str2, 
+	"internal nodes. Clade defined as the most recent common ancestor of ", 
+	whichTaxa()[1], "and ", whichTaxa()[2], "and all of its descendants")
+
+})
+ 	
 output$textAbout <- renderUI({
 			HTML(
 			"<p>This Shiny R code is meant as a tool to explore the diatom phylogeny. The main functionality so far is plotting pre-defined sub-trees or sub-trees based on two user-selected terminal nodes. The code depends on the R packages <a href=http://ape-package.ird.fr>ape</a> and <a href=http://cran.r-project.org/web/packages/phangorn/index.html>phangorn</a>. The code is rather clunky, but it does serve its basic purpose.</p> <p>To run the Interactive Diatom Phylogeny use R and call it from its GitHub repository:</p> <p> <code>shiny::runGitHub('InteractiveDiatomPhylogeny', 'teofiln')</code></p> <p>The topology is that of Theriot et al. 2010 (Plant Ecology and Evolution). This will be replaced by a much larger tree constructed from all available diatom nSSU sequences soon.</p> <p>For an excellent treeviewer in Shiny with the functionality to load your own tree see <a href=https://github.com/KlausVigo/shinyTreeViewer/blob/master/ui.R>shinyTreeViewer</a>.</p>"

@@ -16,7 +16,7 @@ shinyUI(fluidPage(
 
 	sidebarLayout(#position="right",
 		sidebarPanel(
-			p("Select a lineage to explore or choose 'Custom' and select two diatoms to see the sub-tree starting with their most recent common ancestor", style="color:#0066FF"),
+			p("Select a lineage to explore or alternatively choose 'Custom' and select two diatoms to see the sub-tree starting with their most recent common ancestor", style="color:#0066FF"),
 			br(),
 			selectInput("select1", label = h6("Select lineage"),
 						choices = list(
@@ -31,7 +31,7 @@ shinyUI(fluidPage(
 #							"Radials clade 1" = "Radials clade 1",
 #							"Radials clade 2" = "Radials clade 2",
 							"All diatoms" = "All diatoms"), selected = "All diatoms"),
-#			br(), 
+			br(), 
 			selectInput("select2", label = h6("Select first taxon"),
 						choices = taxList, selected = 1),
 			selectInput("select3", label = h6("Select second taxon"),
@@ -42,8 +42,8 @@ shinyUI(fluidPage(
 		mainPanel(
 			tabsetPanel(
 			tabPanel("Tree",
+				textOutput("TreeSummary"),
 				plotOutput("Tree", height="1000px")),
-#				textOutput("Text"))
 #			tabPanel("Some clades"),
 #			tabPanel("Studies"),
 			tabPanel("About", htmlOutput("textAbout"))
