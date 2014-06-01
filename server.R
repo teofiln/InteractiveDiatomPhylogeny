@@ -53,7 +53,7 @@ whichCustom <- reactive({
 		return(finalTree)
 	})
 
-	# plot the tree based on choice
+	# plot the tree
 	output$Tree <- renderPlot({
 		input$get1
 		plot(ladderize(whatPlot()),

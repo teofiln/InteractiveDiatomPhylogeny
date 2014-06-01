@@ -51,9 +51,10 @@ whichCustom <- reactive({
 		else {
 			finalTree <- whichLineage() }
 		return(finalTree)
+		input$get1
 	})
 
-	# plot the tree based on choice
+	# plot the tree
 	output$Tree <- renderPlot({
 		input$get1
 		plot(ladderize(whatPlot()),
@@ -77,8 +78,8 @@ whichCustom <- reactive({
 				}
 			else {
 				isolate({
-					str3 <- gsub("_"," ", whatPlot()[as.numeric(input$select2)])
-					str4 <- gsub("_"," ", whatPlot()[as.numeric(input$select3)])
+					str3 <- gsub("_"," ", whatPlot()$tip.label[as.numeric(input$select2)])
+					str4 <- gsub("_"," ", whatPlot()$tip.label[as.numeric(input$select3)])
 					})
 				}
 				return(c(str3, str4))
