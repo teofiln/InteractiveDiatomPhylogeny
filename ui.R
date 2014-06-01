@@ -16,27 +16,28 @@ shinyUI(fluidPage(
 
 	sidebarLayout(#position="right",
 		sidebarPanel(
-			p("Select a lineage to explore or alternatively choose 'Custom' and select two diatoms to see the sub-tree starting with their most recent common ancestor", style="color:#0066FF"),
+			p("Select a lineage or genus to explore or alternatively choose 'Custom' and select two diatoms to see the sub-tree starting with their most recent common ancestor", style="color:#0066FF"),
 			br(),
-			selectInput("select1", label = h6("Select lineage"),
+			# choose type of subsetting
+			radioButtons("decision", h6("Browse by:"), choices=list("Lineage" = 1, "Genus" = 2, "Custom" = 3), selected = 1),
+			br(),
+			# choose which lineage if type is "Lineage"
+			selectInput("lineage", label = h6("Select lineage"),
 						choices = list(
-							"Custom" = "Custom",
 							"Raphid diatoms" = "Raphid diatoms", 
 							"Pennate diatoms" = "Pennate diatoms", 
-#							"Araphid clade 1" = "Araphid clade 1", 
-#							"Araphid clade 2" = "Araphid clade 2", 
-#							"Polars clade 1" = "Polars clade 1",
-#							"Polars clade 2" = "Polars clade 2",
-#							"Polars clade 3" = "Polars clade 3",
-#							"Radials clade 1" = "Radials clade 1",
-#							"Radials clade 2" = "Radials clade 2",
 							"All diatoms" = "All diatoms"), selected = "All diatoms"),
+			br(),
+			# choose which genus if type is "Genus"
+			textInput("genus1", label = h6("Which genus"),value="Gomphonema"),
 			br(), 
+			# choose which taxa if input is "Custom"
 			selectInput("select2", label = h6("Select first taxon"),
 						choices = taxList, selected = 1),
 			selectInput("select3", label = h6("Select second taxon"),
 						choices = taxList, selected = 16),
-			actionButton("get1","Plot custom sub-tree")
+			br(),
+			actionButton("get1","Plot")	# currently doen't do anything
 		),
 
 		mainPanel(
@@ -44,8 +45,7 @@ shinyUI(fluidPage(
 			tabPanel("Tree",
 				textOutput("TreeSummary"),
 				plotOutput("Tree", height="1000px")),
-#			tabPanel("Some clades"),
-#			tabPanel("Studies"),
+				textOutput("Error"),
 			tabPanel("About", htmlOutput("textAbout"))
 			)
 		)					
