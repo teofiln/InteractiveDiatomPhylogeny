@@ -31,25 +31,25 @@ sidebarPanel(
 
 	# choose which genus if type is "Genus"
 	conditionalPanel(condition= "input.decision == 2",
-	textInput("genus1", label = h6("Which genus"),value="Gomphonema")),
+	textInput("genus", label = h6("Which genus"),value="Gomphonema")),
 
 	# choose which taxa if input is "Custom"
 	conditionalPanel(condition= "input.decision == 3",
 	selectInput("select2", label = h6("Select first taxon"),
 				choices = taxList, selected = 1),
 	selectInput("select3", label = h6("Select second taxon"),
-				choices = taxList, selected = 16)),
-
-	# currently doen't do anything
-	actionButton("get1","Plot")
+				choices = taxList, selected = 16),
+	# currently doesn't do anything
+	actionButton("get1","Plot sub-tree"))
 		),
 
 		mainPanel(
 			tabsetPanel(
 			tabPanel("Tree",
+				textOutput("Error"),
+				br(),
 				textOutput("TreeSummary"),
 				plotOutput("Tree", height="1000px")),
-				textOutput("Error"),
 			tabPanel("About", htmlOutput("textAbout"))
 			)
 		)					

@@ -26,15 +26,15 @@ whichLineage <- reactive({
 	finalTree <- switch(input$lineage,
 		"Raphid diatoms" = subtr[[mrca.phylo(tr, c(101:136))]],
 		"Pennate diatoms" = subtr[[mrca.phylo(tr, c(75:136))]],
-		"All diatoms" = subtr[[mrca.phylo(tr, c(1:N.tip))]])
+		"All diatoms" = subtr[[mrca.phylo(tr, c(1:N.tip))]] )
 	return(finalTree)
 })
 		
 whichGenus <- reactive({
-	gen <- input$genus1
+	gen <- input$genus
 	g1 <- min(which(all.genera==gen))
 	g2 <- max(which(all.genera==gen))
-	finalTree <- subtr[[mrca.phylo(tr, c(g1:g2))]] 
+	finalTree <- subtr[[mrca.phylo(tr, c(g1:g2))]]
 	return(finalTree)
 })
 
@@ -42,53 +42,57 @@ whichCustom <- reactive({
 	finalTree <- subtr[[mrca.phylo(tr, c(input$select2:input$select3))]]
 })
 
-	# deside which function to use to subset the plot
-	whatPlot <- reactive({
-		if (input$decision == 2) {
-			finalTree <- whichGenus() }
-		else if (input$decision == 3) {
-			finalTree <- whichCustom() }
+# deside which function to use to subset the plot
+whatPlot <- reactive({
+	if (input$decision == 2) {
+		finalTree <- whichGenus() }
+	else if (input$decision == 3) {
+		finalTree <- whichCustom() }
+	else {
+		finalTree <- whichLineage() }
+	return(finalTree)
+})
+
+# plot the tree
+treeplot <- function(x) {
+	plot(ladderize(x),
+		label.offset=0.001,
+		cex=0.8,
+		no.margin=TRUE,
+		edge.width=2,
+		edge.color="darkblue",
+		tip.color="darkred")	}
+
+
+output$Tree <- renderPlot({
+	input$get1
+	treeplot(whatPlot())
+})
+
+output$TreeSummary <- renderText({
+	input$get1
+	str1 <- as.character(Ntip(whatPlot()))
+	str2 <- as.character(Nnode(whatPlot()))
+	whichTaxa <- reactive({
+	input$get1
+		if (input$decision != "Custom") {
+			str3 <- gsub("_"," ", whatPlot()$tip.label[1])
+			str4 <- gsub("_"," ", whatPlot()$tip.label[Ntip(whatPlot())])
+			}
 		else {
-			finalTree <- whichLineage() }
-		return(finalTree)
-		input$get1
-	})
+		isolate({
+			str3 <- gsub("_"," ", whatPlot()$tip.label[as.numeric(input$select2)])
+			str4 <- gsub("_"," ", whatPlot()$tip.label[as.numeric(input$select3)])
+				})
+			}
+	return(c(str3, str4))
+})
 
-	# plot the tree
-	output$Tree <- renderPlot({
-		input$get1
-		plot(ladderize(whatPlot()),
-			label.offset=0.001,
-			cex=0.8,
-			no.margin=TRUE,
-			edge.width=2,
-			edge.color="darkblue",
-			tip.color="darkred")
-	})
+paste("Sub-tree composed of ", str1, "species and ", str2, 
+"internal nodes. Clade defined as the most recent common ancestor of ", 
+whichTaxa()[1], "and ", whichTaxa()[2], "and all of its descendants")
 
-	output$TreeSummary <- renderText({
-		input$get1
-		str1 <- as.character(Ntip(whatPlot()))
-		str2 <- as.character(Nnode(whatPlot()))
-		whichTaxa <- reactive({
-		input$get1
-			if (input$decision != "Custom") {
-				str3 <- gsub("_"," ", whatPlot()$tip.label[1])
-				str4 <- gsub("_"," ", whatPlot()$tip.label[Ntip(whatPlot())])
-				}
-			else {
-				isolate({
-					str3 <- gsub("_"," ", whatPlot()$tip.label[as.numeric(input$select2)])
-					str4 <- gsub("_"," ", whatPlot()$tip.label[as.numeric(input$select3)])
-					})
-				}
-				return(c(str3, str4))
-			})
-		paste("Sub-tree composed of ", str1, "species and ", str2, 
-		"internal nodes. Clade defined as the most recent common ancestor of ", 
-		whichTaxa()[1], "and ", whichTaxa()[2], "and all of its descendants")
-
-	})
+})
 
 
 output$textAbout <- renderUI({

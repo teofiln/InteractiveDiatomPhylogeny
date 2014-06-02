@@ -31,7 +31,7 @@ sidebarPanel(
 
 	# choose which genus if type is "Genus"
 	conditionalPanel(condition= "input.decision == 2",
-	textInput("genus1", label = h6("Which genus"),value="Gomphonema")),
+	textInput("genus", label = h6("Which genus"),value="Gomphonema")),
 
 	# choose which taxa if input is "Custom"
 	conditionalPanel(condition= "input.decision == 3",
@@ -47,9 +47,10 @@ sidebarPanel(
 		mainPanel(
 			tabsetPanel(
 			tabPanel("Tree",
+				textOutput("Error"),
+				br(),
 				textOutput("TreeSummary"),
 				plotOutput("Tree", height="1000px")),
-				textOutput("Error"),
 			tabPanel("About", htmlOutput("textAbout"))
 			)
 		)					
