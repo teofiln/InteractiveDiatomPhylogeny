@@ -1,7 +1,7 @@
 library(shiny)
 library(ape)
 
-tr <- read.tree("./theriot2010.newick")
+tr <- read.tree("./giga_ssu.newick")
 
 N.tip <- Ntip(tr)
 N.node <- Nnode(tr)
@@ -38,10 +38,9 @@ sidebarPanel(
 	selectInput("select2", label = h6("Select first taxon"),
 				choices = taxList, selected = 1),
 	selectInput("select3", label = h6("Select second taxon"),
-				choices = taxList, selected = 16)),
-
-	# currently doen't do anything
-	actionButton("get1","Plot")
+				choices = taxList, selected = 16),
+	# currently doesn't do anything
+	actionButton("get1","Plot sub-tree"))
 		),
 
 		mainPanel(

@@ -1,7 +1,7 @@
 library(shiny)
 library(ape)
 
-tr <- read.tree("./theriot2010.newick")
+tr <- read.tree("./kilo_ssu.newick")
 
 N.tip <- Ntip(tr)
 N.node <- Nnode(tr)
