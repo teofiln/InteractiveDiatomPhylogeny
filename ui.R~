@@ -1,7 +1,7 @@
 library(shiny)
 library(ape)
 
-tr <- read.tree("./giga_ssu.newick")
+tr <- read.tree("./theriot2010.newick")
 
 N.tip <- Ntip(tr)
 N.node <- Nnode(tr)
@@ -18,7 +18,7 @@ sidebarLayout(#position="right",
 sidebarPanel(
 	#p("Browse by: ", style="color:#0066FF"),
 	# choose type of subsetting
-	radioButtons("decision", h6("Browse by:"), choices=list("Lineage" = 1, "Genus" = 2, "Custom" = 3), selected = 1),
+	radioButtons("decision", h6("Browse by:", style="color:#0066FF"), choices=list("Lineage" = 1, "Genus" = 2, "Custom" = 3), selected = 1),
 	br(),
 
 	# choose which lineage if type is "Lineage"
@@ -43,15 +43,15 @@ sidebarPanel(
 	actionButton("get1","Plot sub-tree"))
 		),
 
-		mainPanel(
-			tabsetPanel(
-			tabPanel("Tree",
-				textOutput("Error"),
-				br(),
-				textOutput("TreeSummary"),
-				plotOutput("Tree", height="1000px")),
-			tabPanel("About", htmlOutput("textAbout"))
-			)
-		)					
+mainPanel(
+	tabsetPanel(
+		tabPanel("Tree",
+			textOutput("Error"),
+			br(),
+			textOutput("TreeSummary"),
+			plotOutput("Tree", height="1000px")),
+		tabPanel("About", htmlOutput("textAbout"))
+		)
+	)					
 )
 ))

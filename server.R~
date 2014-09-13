@@ -3,7 +3,7 @@ library(ape)
 library(phangorn)
 #source("prepTree.R")
 
-tr <- read.tree("./kilo_ssu.newick")
+tr <- read.tree("./theriot2010.newick")
 
 N.tip <- Ntip(tr)
 N.node <- Nnode(tr)
@@ -24,7 +24,7 @@ shinyServer(function(input, output, session) {
 whichLineage <- reactive({	
 	finalTree <- switch(input$lineage,
 		"Raphid diatoms" = subtr[[mrca.phylo(tr, c(219,446))]],
-		"Pennate diatoms" = subtr[[mrca.phylo(tr, c(601,136))]],
+		"Pennate diatoms" = subtr[[mrca.phylo(tr, c(601,446))]],
 		"All diatoms" = subtr[[mrca.phylo(tr, c(1:N.tip))]] )
 	return(finalTree)
 })
@@ -66,7 +66,8 @@ treeplot <- function(x) {
 		no.margin=TRUE,
 		edge.width=2,
 		edge.color="darkblue",
-		tip.color="darkred")	}
+		tip.color="darkred",
+		use.edge.length=FALSE)	}
 
 output$Tree <- renderPlot({
 	input$get1
