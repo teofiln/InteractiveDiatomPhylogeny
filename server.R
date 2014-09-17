@@ -73,6 +73,33 @@ output$Tree <- renderPlot({
 	input$get1
 	treeplot(whatPlot())
 })
+# export plot 
+
+output$downloadPlot <- downloadHandler(
+	filename="Tree.pdf",
+	
+	content= function(file) {
+		pdf(file, height=10, width=7)
+		treeplot(whatPlot())
+		dev.off()
+	},
+	
+	contentType='application/pdf'
+
+)
+
+# export tree file
+
+output$downloadTreeFile <- downloadHandler(
+	filename="Tree_newick.txt",
+	
+	content= function(file) {
+		write.tree(whatPlot(), file)
+	},
+	
+	contentType='text/txt'
+
+)
 
 output$TreeSummary <- renderText({
 	input$get1
@@ -102,7 +129,6 @@ paste("Sub-tree composed of ", str1, "species and ", str2,
 whichTaxa()[1], "and ", whichTaxa()[2], "and all of its descendants")
 
 })
-
 
 output$textAbout <- renderUI({
 			HTML(

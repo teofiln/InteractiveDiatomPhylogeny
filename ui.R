@@ -40,7 +40,14 @@ sidebarPanel(
 	selectInput("select3", label = h6("Select second taxon"),
 				choices = taxList, selected = 16),
 	# currently doesn't do anything
-	actionButton("get1","Plot sub-tree"))
+	actionButton("get1","Plot sub-tree")),
+	br(),
+	br(),
+	# download plot button
+	downloadButton('downloadPlot', 'Export tree as pdf'),
+	br(),
+	br(),
+	downloadButton('downloadTreeFile', 'Export tree as newick')	
 		),
 
 mainPanel(
