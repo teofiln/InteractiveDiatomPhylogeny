@@ -23,8 +23,8 @@ shinyServer(function(input, output, session) {
 
 whichLineage <- reactive({	
 	finalTree <- switch(input$lineage,
-		"Raphid diatoms" = subtr[[mrca.phylo(tr, c(219,446))]],
-		"Pennate diatoms" = subtr[[mrca.phylo(tr, c(601,446))]],
+		"Raphid diatoms" = subtr[[mrca.phylo(tr, c(101,136))]],
+		"Pennate diatoms" = subtr[[mrca.phylo(tr, c(75,136))]],
 		"All diatoms" = subtr[[mrca.phylo(tr, c(1:N.tip))]] )
 	return(finalTree)
 })
