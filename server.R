@@ -23,38 +23,68 @@ shinyServer(function(input, output, session) {
 
 whichLineage <- reactive({	
 	finalTree <- switch(input$lineage,
-		"Raphid diatoms" = subtr[[mrca.phylo(tr, c(101,136))]],
-		"Pennate diatoms" = subtr[[mrca.phylo(tr, c(75,136))]],
+		
+		"Raphid diatoms" = subtr[[mrca.phylo(tr, 
+			c(min(which(all.genera=="Eunotia")),
+			min(which(all.genera=="Surirella")) ) ) ]],
+		
+		"Pennate diatoms" = subtr[[mrca.phylo(tr, 
+			c(min(which(all.genera=="Plagiogramma")),
+			min(which(all.genera=="Surirella")) ) ) ]],
+		
 		"All diatoms" = subtr[[mrca.phylo(tr, c(1:N.tip))]] )
+	
 	return(finalTree)
 })
 		
 whichGenus <- reactive({
 	gen <- input$genus
-	g1 <- min(which(all.genera==gen))
-	g2 <- max(which(all.genera==gen))
-	finalTree <- subtr[[mrca.phylo(tr, c(g1:g2))]]
+	if (!gen %in% all.genera) {
+		finalTree <- whichLineage()
+		}
+	else {
+		g1 <- min(which(all.genera==gen))
+		g2 <- max(which(all.genera==gen))
+	
+		if (g1!=g2) {
+			finalTree <- subtr[[mrca.phylo(tr, c(g1:g2))]]
+		}
+	
+		else {
+			g2 <- sample(1:N.tip[-g1],1)
+			finalTree <- subtr[[mrca.phylo(tr, c(g1:g2))]]
+		}
+	}
 	return(finalTree)
 })
 
 whichCustom <- reactive({
+
 if (input$get1 == 0) {
-	finalTree <- subtr[[mrca.phylo(tr, c(1:N.tip))]] }
+	finalTree <- subtr[[mrca.phylo(tr, c(1:N.tip))]] 
+	}
+
 else { isolate({	
 	finalTree <- subtr[[mrca.phylo(tr, c(input$select2:input$select3))]]
-	})
+		})
 	}
+
 return(finalTree)
 })
 
 # deside which function to use to subset the tree
 whatPlot <- reactive({
+	
 	if (input$decision == 2) {
-		finalTree <- whichGenus() }
+		finalTree <- whichGenus() 
+		}
 	else if (input$decision == 3) {
-		finalTree <- whichCustom() }
+		finalTree <- whichCustom() 
+		}
 	else {
-		finalTree <- whichLineage() }
+		finalTree <- whichLineage() 
+		}
+
 	return(finalTree)
 })
 
@@ -69,10 +99,23 @@ treeplot <- function(x) {
 		tip.color="darkred",
 		use.edge.length=FALSE)	}
 
+#output$Tree <- reactive({
+
+#if (is.null(whatPlot())) {
+#	renderText({
+#		print("There was a problem with the selection. Either the genus/species is not in the phylogeny, or the genus is represented by a single species.")
+#		})
+#	}  
+#else {
+#}
+#})
+
 output$Tree <- renderPlot({
 	input$get1
 	treeplot(whatPlot())
 })
+
+
 # export plot 
 
 output$downloadPlot <- downloadHandler(
@@ -103,9 +146,11 @@ output$downloadTreeFile <- downloadHandler(
 
 output$TreeSummary <- renderText({
 	input$get1
+	
 	str1 <- as.character(Ntip(whatPlot()))
 	str2 <- as.character(Nnode(whatPlot()))
 	whichTaxa <- reactive({
+	
 	input$get1
 		if (input$decision == 1) {
 			str3 <- gsub("_"," ", whatPlot()$tip.label[1])
@@ -116,13 +161,16 @@ output$TreeSummary <- renderText({
 			str4 <- gsub("_"," ", tr$tip.label[max(which(all.genera==input$genus))])
 			}	
 		else {
+	
 	isolate({
 			str3 <- gsub("_"," ", tr$tip.label[as.numeric(input$select2)] )
 			str4 <- gsub("_"," ", tr$tip.label[as.numeric(input$select3)] )
 		})
 	}
+	
 	return(c(str3, str4))
 })
+
 paste(as.character(unlist(taxList)))
 paste("Sub-tree composed of ", str1, "species and ", str2, 
 "internal nodes. Clade defined as the most recent common ancestor of ", 
