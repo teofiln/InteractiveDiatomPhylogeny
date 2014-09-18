@@ -51,7 +51,7 @@ whichGenus <- reactive({
 		}
 	
 		else {
-			g2 <- sample(1:N.tip[-g1],1)
+			g2 <- sample(c(1:N.tip)[-g1],1)
 			finalTree <- subtr[[mrca.phylo(tr, c(g1:g2))]]
 		}
 	}

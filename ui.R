@@ -34,7 +34,7 @@ sidebarPanel(
 	textInput("genus", label = h6("Which genus"), value="Gomphonema"),
 	br(),
 	br(),
-	print(HTML("<p>If the genus is absent, the whole tree is displayed.</p> <p>If the genus is represented by a single species, a random sub-tree that contains that genus is displayed</p>") )
+	print(HTML("<p>If the genus is absent, the whole tree is displayed.</p> <p>If the genus is represented by a single species, a random sub-tree that contains that genus is displayed.</p>") )
 	),
 
 	# choose which taxa if input is "Custom"
