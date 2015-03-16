@@ -3,7 +3,7 @@ library(ape)
 library(phangorn)
 #source("prepTree.R")
 
-tr <- read.tree("./theriot2010.newick")
+tr <- read.tree("./Nakov_etal_2014ISMEJ.newick")
 
 N.tip <- Ntip(tr)
 N.node <- Nnode(tr)
@@ -111,7 +111,7 @@ treeplot <- function(x) {
 #})
 
 output$Tree <- renderPlot({
-	input$get1
+#	input$get1
 	treeplot(whatPlot())
 })
 

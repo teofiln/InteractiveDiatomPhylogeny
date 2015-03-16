@@ -1,7 +1,7 @@
 library(shiny)
 library(ape)
 
-tr <- read.tree("./theriot2010.newick")
+tr <- read.tree("./Nakov_etal_2014ISMEJ.newick")
 
 N.tip <- Ntip(tr)
 N.node <- Nnode(tr)
@@ -57,10 +57,7 @@ sidebarPanel(
 mainPanel(
 	tabsetPanel(
 		tabPanel("Tree",
-			textOutput("Error"),
-			br(),
-			textOutput("TreeSummary"),
-			plotOutput("Tree", height="1000px")),
+			plotOutput("Tree", height=1000)),
 		tabPanel("About", htmlOutput("textAbout"))
 		)
 	)					
