@@ -15,7 +15,7 @@ shinyUI(fluidPage(
 titlePanel(h3("Diatom Phylogeny Browser", style="color:grey")),
 
 sidebarLayout(#position="right",
-sidebarPanel(
+sidebarPanel(width=3,
 	#p("Browse by: ", style="color:#0066FF"),
 	# choose type of subsetting
 	radioButtons("decision", h6("Browse by:", style="color:#0066FF"), choices=list("Lineage" = 1, "Genus" = 2, "Custom" = 3), selected = 1),
@@ -31,7 +31,7 @@ sidebarPanel(
 
 	# choose which genus if type is "Genus"
 	conditionalPanel(condition= "input.decision == 2",
-	textInput("genus", label = h6("Which genus"), value="Gomphonema"),
+	textInput("genus", label = h6("Select genus"), value="Gomphonema"),
 	br(),
 	br(),
 	print(HTML("<p>If the genus is absent, the whole tree is displayed.</p> <p>If the genus is represented by a single species, a random sub-tree that contains that genus is displayed.</p>") )
@@ -57,7 +57,7 @@ sidebarPanel(
 mainPanel(
 	tabsetPanel(
 		tabPanel("Tree",
-			plotOutput("Tree", height=1000)),
+			plotOutput("Tree", height=2000)),
 		tabPanel("About", htmlOutput("textAbout"))
 		)
 	)					

@@ -94,9 +94,9 @@ treeplot <- function(x) {
 		label.offset=0.001,
 		cex=0.8,
 		no.margin=TRUE,
-		edge.width=2,
-		edge.color="darkblue",
-		tip.color="darkred",
+		edge.width=3,
+		edge.color="darkgrey",
+		tip.color="black",
 		use.edge.length=FALSE)	}
 
 #output$Tree <- reactive({
