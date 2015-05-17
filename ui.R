@@ -18,7 +18,9 @@ sidebarLayout(#position="right",
 sidebarPanel(width=3,
 	#p("Browse by: ", style="color:#0066FF"),
 	# choose type of subsetting
-	radioButtons("decision", h6("Browse by:", style="color:#0066FF"), choices=list("Lineage" = 1, "Genus" = 2, "Custom" = 3), selected = 1),
+	radioButtons("decision", h6("Browse by:", style="color:#0066FF"), 
+               choices=list("Lineage" = 1, "Genus" = 2, "Custom" = 3), 
+               selected = 1),
 	br(),
 
 	# choose which lineage if type is "Lineage"
@@ -33,7 +35,6 @@ sidebarPanel(width=3,
 	conditionalPanel(condition= "input.decision == 2",
 	textInput("genus", label = h6("Select genus"), value="Gomphonema"),
 	br(),
-	br(),
 	print(HTML("<p>If the genus is absent, the whole tree is displayed.</p> <p>If the genus is represented by a single species, a random sub-tree that contains that genus is displayed.</p>") )
 	),
 
@@ -45,19 +46,24 @@ sidebarPanel(width=3,
 				choices = taxList, selected = 16),
 	# currently doesn't do anything
 	actionButton("get1","Plot sub-tree")),
+  br(),
+	radioButtons("Character", h6("Mapped character:", style="color:#0066FF"), 
+	             choices=list("Planktonic-Benthic" = "Habitat", 
+                            "Solitary-Colonial" = "Colony"), 
+	             selected = "Habitat"),
 	br(),
 	br(),
 	# download plot button
 	downloadButton('downloadPlot', 'Export tree as pdf'),
 	br(),
 	br(),
-	downloadButton('downloadTreeFile', 'Export tree as newick')	
+	downloadButton('downloadTreeFile', 'Export tree as newick')
 		),
 
-mainPanel(
+mainPanel(witdth=9,
 	tabsetPanel(
 		tabPanel("Tree",
-			plotOutput("Tree", height=2000)),
+			plotOutput("Tree", height=2000, width=1200)),
 		tabPanel("About", htmlOutput("textAbout"))
 		)
 	)					
