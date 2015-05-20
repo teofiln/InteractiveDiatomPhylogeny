@@ -5,7 +5,7 @@ library(geiger)
 library(corHMM)
 
 Traits <- read.csv("./Jan28_RECODED_282taxa_3traits.data_.csv", header=TRUE)
-DAT <- data.frame(Traits[,3:4])
+DAT <- data.frame(Traits[,3:5])
 rownames(DAT) <- Traits[,2]
 
 tr <- read.tree("./Nakov_etal_2014ISMEJ.newick")
@@ -87,11 +87,17 @@ whatTree <- reactive({
 whatData <- reactive({
   Tree <- whatTree()
   Data <- treedata(phy = Tree, data = DAT, sort = TRUE, warnings = FALSE)$data
-  if (input$Character == "Habitat") {
-    Char <- Data[,1]
-    } else {
-      Char <- Data[,2]
-      }
+  Char <- switch(input$Character,
+                 "Habitat" = Data[,1],
+                 "Colony" = Data[,2],
+                 "Salinity" = Data[,3])
+  
+  
+#   if (input$Character == "Habitat") {
+#     Char <- Data[,1]
+#     } else {
+#       Char <- Data[,2]
+#       }
   return(data.frame(Names=names(Char), Char))
 })
 
@@ -109,11 +115,10 @@ makeLabels <- reactive({
 })
 
 makeLegend <- reactive({
-  if (input$Character == "Habitat") {
-    LegText <- c("Planktonic", "Benthic")
-  } else {
-    LegText <- c("Solitary", "Colonial")
-  }
+  switch(input$Character,
+         "Habitat" = c("Planktonic", "Benthic"),
+         "Colony" = c("Solitary", "Colonial"),
+         "Salinity" = c("Marine", "Freshwater"))
 })
 
 # function to plot the tree
