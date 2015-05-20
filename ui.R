@@ -17,7 +17,6 @@ titlePanel("Diatom Phylogeny Browser"),
 
 sidebarLayout(#position="right",
 sidebarPanel(width=3,
-	#p("Browse by: ", style="color:#0066FF"),
 	# choose type of subsetting
 	radioButtons("decision", "Browse by:", 
                choices=list("Lineage" = 1, "Genus" = 2, "Custom" = 3), 
