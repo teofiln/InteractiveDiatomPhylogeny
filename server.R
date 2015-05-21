@@ -91,13 +91,6 @@ whatData <- reactive({
                  "Habitat" = Data[,1],
                  "Colony" = Data[,2],
                  "Salinity" = Data[,3])
-  
-  
-#   if (input$Character == "Habitat") {
-#     Char <- Data[,1]
-#     } else {
-#       Char <- Data[,2]
-#       }
   return(data.frame(Names=names(Char), Char))
 })
 
@@ -133,13 +126,18 @@ treePlot <- function(x) {
        use.edge.length=TRUE)
 }
 
+fPlotSize <- function() {
+  Height <- Ntip(whatTree())*15
+  return(Height)
+}
+
 output$Tree <- renderPlot({
   treePlot(whatTree())
   ancestors <- getAncestors()$states
   nodelabels(pie=ancestors, cex=0.3, piecol = Cols)
   tiplabels(pch=21, bg=makeLabels(), cex=2)
   legend(x=0, y=Ntip(whatTree())/2, makeLegend(), pch=21, pt.bg=Cols, bty="n", cex=2)
-})
+}, height = fPlotSize)
 
 # export plot 
 output$downloadPlot <- downloadHandler(

@@ -34,15 +34,14 @@ sidebarPanel(width=3,
 	# choose which genus if type is "Genus"
 	conditionalPanel(condition= "input.decision == 2",
 	textInput("genus", label = "Select genus", value="Gomphonema"),
-	br(),
-	print(HTML("<p>If the genus is absent, the whole tree is displayed.</p> <p>If the genus is represented by a single species, a random sub-tree that contains that genus is displayed.</p>") )
+	helpText("If the genus is absent, the whole tree is displayed. If the genus is represented by a single species, a random sub-tree that contains that genus is displayed.")
 	),
 
 	# choose which taxa if input is "Custom"
 	conditionalPanel(condition= "input.decision == 3",
 	selectInput("select2", label = "Select first taxon",
 				choices = taxList, selected = 1),
-	selectInput("select3", label = h6("Select second taxon"),
+	selectInput("select3", label = "Select second taxon",
 				choices = taxList, selected = 16),
 	# currently doesn't do anything
 	actionButton("get1","Plot sub-tree")),
@@ -53,8 +52,7 @@ sidebarPanel(width=3,
                             "Marine-Freshwater" = "Salinity"), 
 	             selected = "Habitat"),
 	br(),
-	br(),
-	# download plot button
+		# download plot button
 	downloadButton('downloadPlot', 'Export tree as pdf'),
 	br(),
 	br(),
@@ -63,8 +61,7 @@ sidebarPanel(width=3,
 
 mainPanel(witdth=9,
 	tabsetPanel(
-		tabPanel("Tree",
-			plotOutput("Tree", height=2000, width=1200)),
+		tabPanel("Tree", plotOutput("Tree")),
 		tabPanel("About", htmlOutput("textAbout"))
 		)
 	)					
